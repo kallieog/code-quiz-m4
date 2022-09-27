@@ -1,62 +1,59 @@
 //Create start button
 var startButton = document.querySelector(".start-btn");
-var startScreen = document.querySelector(".start")
-var Q = 0
+var startScreen = document.querySelector(".start");
+var Q = 0;
+var count = 59;
+var interval;
+var score = 0;
+var timeLeft;
+var highScores = JSON.parse(localStorage.getItem("highScores"))||[]
 
-
-// var interval = setInterval(function() {
-//     document.getElementById("count").innerHTML=count;
-//     count--;
-//     if (count === 0){
-//         clearInterval(interval);
-//         alert("You're out of time!");
-//     }
-// }, 1000);
 var questions = [
     {
-        text: "Question 1",
-        choices: ["a1", "a2", "a3", "a4"],
-        correct: "a1"
+        text: "Q1. What city wouuld you be in if you were standing on the Spanish Steps?",
+        choices: ["Mexico City", "Madrid", "Rome", "Barcelona"],
+        correct: "Rome"
     },
     {
-        text: "Question 2",
-        choices: ["a1", "a2", "a3", "a4"],
-        correct: "a1"
+        text: "Q2. What is the most common surname in the United States?",
+        choices: ["Smith", "Johnson", "Williams", "Anderson"],
+        correct: "Smith"
     },
     {
-        text: "Question 3",
-        choices: ["a1", "a2", "a3", "a4"],
-        correct: "a1"
+        text: "Q3. What company was originally named 'Cadabra?'",
+        choices: ["Google", "Walmart", "Amazon", "eBay"],
+        correct: "Amazon"
     },
     {
-        text: "Question 4",
-        choices: ["a1", "a2", "a3", "a4"],
-        correct: "a1"
+        text: "Q4. Which U.S. state is Area 51 in?",
+        choices: ["New Mexico", "Nevada", "Colorado", "Wyoming"],
+        correct: "Nevada"
     },
     {
-        text: "Question 5",
-        choices: ["a1", "a2", "a3", "a4"],
-        correct: "a1"
+        text: "Q5. Which president is on the $2 bill?",
+        choices: ["Thomas Jefferson", "Alexander Hamilton", "James Madison", "John Adams"],
+        correct: "Thomas Jefferson"
     }
 
 ]
-//Create start game function
-function startGame() {
-    //hide start button
-    startScreen.classList.add("hide")
-    //Shoq quiz container
-    document.querySelector(".quiz").classList.remove("hide")
-    var count = 60;
-    var interval = setInterval(function() {
-    document.getElementById("count").innerHTML=count;
+function countDown() {
+    document.getElementById("count").innerHTML = count;
     count--;
-    if (count === 0){
-        clearInterval(interval);
-        alert("You're out of time!");
-    }
-}, 1000);
-    //Start timer(skip for now)
-    //Display first question
+    if (count < 0) {
+        count = 0
+        document.getElementById("count").innerHTML = count
+    };
+}
+function startGame() {
+  
+    startScreen.classList.add("hide")
+    console.log(startScreen)
+   
+
+
+    interval = setInterval(countDown, 1000);
+    document.querySelector(".quiz").classList.remove("hide")
+
     buildQuestionCard()
 }
 function buildQuestionCard() {
@@ -76,24 +73,43 @@ function buildQuestionCard() {
 }
 function evaluateAnswer() {
     if (this.value !== questions[Q].correct) {
-        //if wrong,reduce time
-
+        
+        count -= 10
+        document.getElementById("count").innerHTML = count;
+        
     }
     else {
-        //If correct, add to score
+        score++
     }
     Q++
-    buildQuestionCard()
+    if (Q === questions.length) {
+        endGame()
+        
+    }
+    else {
+        buildQuestionCard()
+    }
+}
+function endGame(){
+document.querySelector(".end").classList.remove("hide");
+document.querySelector(".quiz").classList.add("hide");
+ timeLeft = count;
+clearInterval(interval);
+document.getElementById("count").innerHTML="";
+alert("You're out of time!");
+
+
+
+}
+function submitScore(){
+    //get initials and score
+   var initials = document.getElementById("initials").value;
+   var scoreObject = {
+    initials:initials,
+    totalScore: timeLeft*score
+   }
+   highScores.push(scoreObject)
+   localStorage.setItem("highScores", JSON.stringify(highScores))
 }
 
-//Create question array
-//Display first question
-//Add multiple choice buttons
-//Find out what button they clicked
-//Check and see if it matches correct answer
-//If wrong, reduce time
-//If correct, add to score
-//When out of questions, end game
-
 startButton.addEventListener("click", startGame)
-startButton.addEventListener("click", count)

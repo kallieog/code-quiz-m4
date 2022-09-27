@@ -5,10 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="start"  id="count"></div>
+    <p id="count">60</p>
+    <p id="score"></p>
+    <div class="start">
         <h1>Coding Quiz</h1>
         <button class="start-btn">Start</button>
         
@@ -18,6 +20,11 @@
         <div class="button-box">
 
         </div>
+    </div>
+    <div class="end hide">
+        <h3>Game Over! Submit initials to scoreboard.</h3>
+        <input id="initials" max="3" type="text">
+        <button id="submit" onclick = "submitScore()">Submit Score</button>
     </div>
     <script src="script.js"></script>
 </body>
